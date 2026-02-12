@@ -1,5 +1,5 @@
 # ===============================
-# STOCK PRICE PREDICTION SCRIPT
+# STOCK PRICE PREDICTION SCRIPT (FINAL VERSION)
 # ===============================
 
 import pandas as pd
@@ -35,18 +35,39 @@ print("Model and Encoder Loaded Successfully")
 
 
 # ===============================
-# LOAD DATASET
+# LOAD DATASET (SAFE LOADING)
 # ===============================
 
 print("Loading Dataset...")
 
-df = pd.read_csv(DATA_PATH)
+df = pd.read_csv(DATA_PATH, low_memory=False)
 
+# Remove duplicate header row if exists
+df = df[df["company"] != "company"]
+
+# Clean company column
+df["company"] = df["company"].astype(str).str.strip().str.upper()
+
+# Convert numeric columns safely
+numeric_cols = ["open", "high", "low", "close"]
+
+for col in numeric_cols:
+    df[col] = pd.to_numeric(df[col], errors="coerce")
+
+# Convert date safely (DD-MM-YYYY FIX)
+df["trade_date"] = pd.to_datetime(
+    df["trade_date"],
+    dayfirst=True,
+    errors="coerce"
+)
+
+# Remove invalid rows
 df.dropna(inplace=True)
 
-df["trade_date"] = pd.to_datetime(df["trade_date"])
-
+# Sort properly
 df.sort_values(["company", "trade_date"], inplace=True)
+
+df.reset_index(drop=True, inplace=True)
 
 print("Dataset Loaded Successfully")
 
@@ -57,8 +78,15 @@ print("Dataset Loaded Successfully")
 
 print("Performing Feature Engineering...")
 
-# Encode company
-df["company_encoded"] = encoder.transform(df["company"])
+# Safe encoding
+def safe_encode(company):
+    if company in encoder.classes_:
+        return encoder.transform([company])[0]
+    return None
+
+df["company_encoded"] = df["company"].apply(safe_encode)
+
+df.dropna(subset=["company_encoded"], inplace=True)
 
 # Previous close
 df["prev_close"] = df.groupby("company")["close"].shift(1)
@@ -68,14 +96,14 @@ df["ma_5"] = (
     df.groupby("company")["close"]
     .rolling(5)
     .mean()
-    .reset_index(0, drop=True)
+    .reset_index(level=0, drop=True)
 )
 
 df["ma_10"] = (
     df.groupby("company")["close"]
     .rolling(10)
     .mean()
-    .reset_index(0, drop=True)
+    .reset_index(level=0, drop=True)
 )
 
 # Volatility
@@ -87,16 +115,23 @@ print("Feature Engineering Completed")
 
 
 # ===============================
-# FUNCTION: PREDICT FOR COMPANY
+# PREDICTION FUNCTION
 # ===============================
 
 def predict_company(company_name):
 
+    company_name = company_name.strip().upper()
+
+    # Check encoder
+    if company_name not in encoder.classes_:
+        print(f"❌ Company '{company_name}' not found in trained model")
+        return None
+
     company_data = df[df["company"] == company_name]
 
     if company_data.empty:
-        print(f"No data found for {company_name}")
-        return
+        print(f"❌ No dataset data found for {company_name}")
+        return None
 
     latest = company_data.iloc[-1]
 
@@ -104,6 +139,7 @@ def predict_company(company_name):
     print("Company:", company_name)
     print("Current Price:", latest["close"])
 
+    # Prepare input
     input_df = pd.DataFrame([{
         "company_encoded": latest["company_encoded"],
         "open": latest["open"],
@@ -116,9 +152,10 @@ def predict_company(company_name):
         "volatility": latest["volatility"]
     }])
 
+    # Predict
     prediction = model.predict(input_df)[0]
 
-    predicted_price = round(prediction, 2)
+    predicted_price = round(float(prediction), 2)
 
     print("Predicted Next Day Price:", predicted_price)
 
@@ -133,20 +170,21 @@ def predict_company(company_name):
 
 
 # ===============================
-# MAIN TERMINAL EXECUTION
+# TERMINAL EXECUTION
 # ===============================
 
 if __name__ == "__main__":
 
-    print("\nAvailable Companies:")
+    print("\nAvailable Companies:\n")
 
-    companies = df["company"].unique()
+    companies = sorted(df["company"].unique())
 
-    for i, comp in enumerate(companies[:20]):
+    for comp in companies[:50]:
         print(comp)
 
     company = input("\nEnter Company Name: ").strip().upper()
 
-    predict_company(company)
+    result = predict_company(company)
 
-    print("\nPrediction Completed Successfully")
+    if result is not None:
+        print("\nPrediction Completed Successfully")
