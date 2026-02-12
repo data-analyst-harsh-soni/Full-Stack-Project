@@ -1,9 +1,11 @@
 # ===============================
-# FASTAPI STOCK PREDICTION API
+# FASTAPI STOCK PREDICTION API + FRONTEND SERVING
 # ===============================
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import pandas as pd
 import joblib
 import os
@@ -23,6 +25,38 @@ DATA_PATH = os.path.join(
     "stock_market_clean_dataset_with_Feature_Eng",
     "nse_prices.csv"
 )
+
+FRONTEND_PATH = os.path.join(BASE_DIR, "..", "frontend")
+
+# ===============================
+# CREATE APP
+# ===============================
+
+app = FastAPI()
+
+# ===============================
+# ENABLE CORS
+# ===============================
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# ===============================
+# SERVE FRONTEND
+# ===============================
+
+# static files (css, js)
+app.mount("/static", StaticFiles(directory=FRONTEND_PATH), name="static")
+
+# homepage
+@app.get("/")
+def serve_home():
+    return FileResponse(os.path.join(FRONTEND_PATH, "index.html"))
 
 # ===============================
 # LOAD MODEL & ENCODER
@@ -71,22 +105,12 @@ df.dropna(inplace=True)
 print("Feature Engineering Done")
 
 # ===============================
-# CREATE APP
+# TEST API
 # ===============================
 
-app = FastAPI()
-
-@app.get("/")
-def home():
-    return {"message": "Stock Market API is running"}
-# Enable CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+@app.get("/api/test")
+def test():
+    return {"status": "API working"}
 
 # ===============================
 # GET COMPANIES
@@ -94,11 +118,8 @@ app.add_middleware(
 
 @app.get("/companies")
 def get_companies():
-
     companies = sorted(df["company"].unique().tolist())
-
     return companies
-
 
 # ===============================
 # GET LATEST PRICE
@@ -120,7 +141,6 @@ def get_latest(company: str):
         "low": float(latest["low"]),
         "close": float(latest["close"])
     }
-
 
 # ===============================
 # PREDICT
