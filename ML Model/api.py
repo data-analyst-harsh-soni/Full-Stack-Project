@@ -76,6 +76,9 @@ print("Feature Engineering Done")
 
 app = FastAPI()
 
+@app.get("/")
+def home():
+    return {"message": "Stock Market API is running"
 # Enable CORS
 app.add_middleware(
     CORSMiddleware,
