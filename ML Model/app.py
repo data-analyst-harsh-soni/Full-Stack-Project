@@ -1,51 +1,35 @@
-# ===============================
-# FASTAPI STOCK PREDICTION API
-# ===============================
-
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
 import pandas as pd
+import numpy as np
 import joblib
-import os
 
-# PATH SETUP
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_absolute_error, r2_score
+from sklearn.preprocessing import LabelEncoder
 
-MODEL_PATH = os.path.join(BASE_DIR, "stock_model.pkl")
-ENCODER_PATH = os.path.join(BASE_DIR, "company_encoder.pkl")
 
-DATA_PATH = os.path.join(
-    BASE_DIR,
-    "..",
-    "stock_market_clean_dataset_with_Feature_Eng",
-    "nse_prices.csv"
+# LOAD DATASET
+df = pd.read_csv(
+    r"../stock_market_clean_dataset_with_Feature_Eng/nse_prices.csv"
 )
 
-# CREATE APP
-app = FastAPI()
+print("Dataset Loaded")
 
-# ENABLE CORS (important for Vercel frontend)
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
-# LOAD MODEL
-model = joblib.load(MODEL_PATH)
-encoder = joblib.load(ENCODER_PATH)
-
-# LOAD DATA
-df = pd.read_csv(DATA_PATH)
+# CLEANING
+df = df.dropna()
 
 df["trade_date"] = pd.to_datetime(df["trade_date"])
+
 df = df.sort_values(["company", "trade_date"])
 
-# FEATURE ENGINEERING
-df["company_encoded"] = encoder.transform(df["company"])
 
+# ENCODE COMPANY
+encoder = LabelEncoder()
+df["company_encoded"] = encoder.fit_transform(df["company"])
+
+
+# FEATURE ENGINEERING
 df["prev_close"] = df.groupby("company")["close"].shift(1)
 
 df["ma_5"] = df.groupby("company")["close"].rolling(5).mean().reset_index(0, drop=True)
@@ -54,66 +38,66 @@ df["ma_10"] = df.groupby("company")["close"].rolling(10).mean().reset_index(0, d
 
 df["volatility"] = df["high"] - df["low"]
 
-df.dropna(inplace=True)
+df["target"] = df.groupby("company")["close"].shift(-1)
+
+df = df.dropna()
+
+print("Feature Engineering Done")
+
+
+# FEATURES
+features = [
+    "company_encoded",
+    "open",
+    "high",
+    "low",
+    "close",
+    "prev_close",
+    "ma_5",
+    "ma_10",
+    "volatility"
+]
+
+X = df[features]
+y = df["target"]
+
+
+# SPLIT
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, shuffle=False
+)
+
+
+# MODEL
+model = RandomForestRegressor(
+    n_estimators=100,
+    max_depth=5,
+    random_state=42,
+    n_jobs=-1
+)
+
+model.fit(X_train, y_train)
+
+print("Model Trained")
+
+
+# EVALUATION
+predictions = model.predict(X_test)
+
+print("MAE:", round(mean_absolute_error(y_test, predictions), 2))
+print("R2 Score:", round(r2_score(y_test, predictions), 4))
+
+
+# SAVE MODEL
+joblib.dump(model, "stock_model.pkl")
+joblib.dump(encoder, "company_encoder.pkl")
+
+print("Model Saved Successfully")
+
 
 # TEST
-@app.get("/")
-def home():
-    return {"message": "Stock API running"}
+sample = X_test.iloc[-1:]
+pred = model.predict(sample)
 
-# GET COMPANIES
-@app.get("/companies")
-def get_companies():
-    return sorted(df["company"].unique().tolist())
-
-# GET LATEST
-@app.get("/latest/{company}")
-def get_latest(company: str):
-
-    company_data = df[df["company"] == company]
-
-    if company_data.empty:
-        return {"error": "Company not found"}
-
-    latest = company_data.iloc[-1]
-
-    return {
-        "open": float(latest["open"]),
-        "high": float(latest["high"]),
-        "low": float(latest["low"]),
-        "close": float(latest["close"])
-    }
-
-# PREDICT
-@app.post("/predict")
-def predict(data: dict):
-
-    company = data["company"]
-
-    company_data = df[df["company"] == company]
-
-    if company_data.empty:
-        return {"error": "Company not found"}
-
-    latest = company_data.iloc[-1]
-
-    input_df = pd.DataFrame([{
-        "company_encoded": latest["company_encoded"],
-        "open": data["open"],
-        "high": data["high"],
-        "low": data["low"],
-        "close": data["close"],
-        "prev_close": latest["prev_close"],
-        "ma_5": latest["ma_5"],
-        "ma_10": latest["ma_10"],
-        "volatility": data["high"] - data["low"]
-    }])
-
-    prediction = model.predict(input_df)[0]
-
-    trend = "UP" if prediction > data["close"] else "DOWN"
-
-    return {
-        "prediction": float(prediction),
-        "trend": trend
-    }
+print("Prediction:", round(pred[0], 2))
+print("Actual:", round(y_test.iloc[-1], 2))
