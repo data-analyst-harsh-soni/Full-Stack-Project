@@ -9,7 +9,7 @@ import joblib
 import os
 
 # ===============================
-# PATH SETUP
+# PATH SETUP (IMPORTANT FIX)
 # ===============================
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -52,7 +52,8 @@ encoder = None
 try:
     model = joblib.load(MODEL_PATH)
     encoder = joblib.load(ENCODER_PATH)
-    print("✅ Model and Encoder Loaded Successfully")
+
+    print("✅ Model and Encoder Loaded")
 
 except Exception as e:
     print("❌ Model load error:", str(e))
@@ -65,48 +66,50 @@ except Exception as e:
 df = None
 
 try:
-    df = pd.read_csv(
-        DATA_PATH,
-        encoding="utf-8",
-        engine="python",
-        on_bad_lines="skip",
+
+    df = pd.read_csv(DATA_PATH)
+
+    # Clean company column
+    df["company"] = (
+        df["company"]
+        .astype(str)
+        .str.strip()
+        .str.upper()
     )
 
-    # ✅ FIX 1: Remove wrong header row
-    df = df[df["company"] != "company"]
-
-    # ✅ FIX 2: Clean company column
-    df["company"] = df["company"].astype(str).str.strip().str.upper()
-
-    # ✅ FIX 3: Convert numeric safely
-    numeric_cols = ["open", "high", "low", "close"]
-
-    for col in numeric_cols:
+    # Convert numeric safely
+    for col in ["open", "high", "low", "close"]:
         df[col] = pd.to_numeric(df[col], errors="coerce")
 
-    # ✅ FIX 4: Fix date format
+    # Fix date
     df["trade_date"] = pd.to_datetime(
         df["trade_date"],
-        dayfirst=True,
         errors="coerce"
     )
 
     df.dropna(inplace=True)
 
-    df = df.sort_values(["company", "trade_date"])
+    df = df.sort_values(
+        ["company", "trade_date"]
+    )
 
     # ===============================
     # FEATURE ENGINEERING
     # ===============================
 
-    # ✅ FIX 5: Safe encoding
     df["company_encoded"] = df["company"].apply(
-        lambda x: encoder.transform([x])[0] if x in encoder.classes_ else None
+        lambda x:
+        encoder.transform([x])[0]
+        if x in encoder.classes_
+        else None
     )
 
     df.dropna(subset=["company_encoded"], inplace=True)
 
-    df["prev_close"] = df.groupby("company")["close"].shift(1)
+    df["prev_close"] = (
+        df.groupby("company")["close"]
+        .shift(1)
+    )
 
     df["ma_5"] = (
         df.groupby("company")["close"]
@@ -126,9 +129,10 @@ try:
 
     df.dropna(inplace=True)
 
-    print("✅ Dataset Loaded and Feature Engineering Completed")
+    print("✅ Dataset Loaded Successfully")
 
 except Exception as e:
+
     print("❌ Dataset load error:", str(e))
 
 
@@ -138,14 +142,16 @@ except Exception as e:
 
 @app.get("/")
 def home():
+
     return {
         "status": "running",
-        "message": "Stock Market Prediction API is working"
+        "model_loaded": model is not None,
+        "dataset_loaded": df is not None
     }
 
 
 # ===============================
-# GET COMPANIES LIST
+# GET COMPANIES
 # ===============================
 
 @app.get("/companies")
@@ -154,7 +160,9 @@ def get_companies():
     if df is None:
         return {"error": "Dataset not loaded"}
 
-    return sorted(df["company"].unique().tolist())
+    return sorted(
+        df["company"].unique().tolist()
+    )
 
 
 # ===============================
@@ -162,14 +170,16 @@ def get_companies():
 # ===============================
 
 @app.get("/latest/{company}")
-def get_latest(company: str):
-
-    company = company.strip().upper()
+def latest_price(company: str):
 
     if df is None:
         return {"error": "Dataset not loaded"}
 
-    company_data = df[df["company"] == company]
+    company = company.strip().upper()
+
+    company_data = df[
+        df["company"] == company
+    ]
 
     if company_data.empty:
         return {"error": "Company not found"}
@@ -177,33 +187,49 @@ def get_latest(company: str):
     latest = company_data.iloc[-1]
 
     return {
+
         "company": company,
+
         "open": float(latest["open"]),
+
         "high": float(latest["high"]),
+
         "low": float(latest["low"]),
+
         "close": float(latest["close"])
     }
 
 
 # ===============================
-# PREDICT STOCK PRICE
+# PREDICT
 # ===============================
 
 @app.post("/predict")
 def predict(data: dict):
 
-    if df is None or model is None:
-        return {"error": "Model or dataset not loaded"}
+    if model is None or df is None:
 
-    company = data.get("company", "").strip().upper()
+        return {
+            "error":
+            "Model or dataset not loaded"
+        }
+
+    company = (
+        data.get("company", "")
+        .strip()
+        .upper()
+    )
 
     if company not in encoder.classes_:
-        return {"error": "Company not in trained model"}
 
-    company_data = df[df["company"] == company]
+        return {
+            "error":
+            "Company not supported"
+        }
 
-    if company_data.empty:
-        return {"error": "Company not found"}
+    company_data = df[
+        df["company"] == company
+    ]
 
     latest = company_data.iloc[-1]
 
@@ -214,32 +240,52 @@ def predict(data: dict):
 
     input_df = pd.DataFrame([{
 
-        "company_encoded": latest["company_encoded"],
+        "company_encoded":
+        latest["company_encoded"],
 
-        "open": open_price,
+        "open":
+        open_price,
 
-        "high": high_price,
+        "high":
+        high_price,
 
-        "low": low_price,
+        "low":
+        low_price,
 
-        "close": close_price,
+        "close":
+        close_price,
 
-        "prev_close": latest["prev_close"],
+        "prev_close":
+        latest["prev_close"],
 
-        "ma_5": latest["ma_5"],
+        "ma_5":
+        latest["ma_5"],
 
-        "ma_10": latest["ma_10"],
+        "ma_10":
+        latest["ma_10"],
 
-        "volatility": high_price - low_price
+        "volatility":
+        high_price - low_price
 
     }])
 
-    prediction = float(model.predict(input_df)[0])
+    prediction = float(
+        model.predict(input_df)[0]
+    )
 
-    trend = "UP" if prediction > close_price else "DOWN"
+    trend = (
+        "UP"
+        if prediction > close_price
+        else "DOWN"
+    )
 
     return {
+
         "company": company,
-        "prediction": round(prediction, 2),
-        "trend": trend
+
+        "prediction":
+        round(prediction, 2),
+
+        "trend":
+        trend
     }
