@@ -1,13 +1,7 @@
-// ===============================
-// API Configuration (YOUR REAL BACKEND)
-// ===============================
+
 const BASE_URL = "https://stock-market-api-1vsa.onrender.com";
 const API_URL = `${BASE_URL}/predict`;
 
-
-// ===============================
-// LOAD COMPANIES
-// ===============================
 async function loadCompanies() {
 
     try {
@@ -51,10 +45,6 @@ async function loadCompanies() {
 
 }
 
-
-// ===============================
-// LOAD LATEST PRICE
-// ===============================
 async function loadLatestPrice(company) {
 
     if (!company) return;
@@ -96,10 +86,6 @@ async function loadLatestPrice(company) {
 
 }
 
-
-// ===============================
-// DOM Elements
-// ===============================
 const predictionForm =
     document.getElementById("predictionForm");
 
@@ -148,10 +134,6 @@ const lowInput =
 const closeInput =
     document.getElementById("close");
 
-
-// ===============================
-// ERROR FUNCTIONS
-// ===============================
 function showError(message) {
 
     errorText.textContent =
@@ -172,10 +154,6 @@ function hideError() {
 
 }
 
-
-// ===============================
-// LOADING FUNCTIONS
-// ===============================
 function showLoading() {
 
     predictBtn.disabled = true;
@@ -194,10 +172,6 @@ function hideLoading() {
 
 }
 
-
-// ===============================
-// FORMAT
-// ===============================
 function formatCurrency(value) {
 
     return "₹" +
@@ -206,10 +180,6 @@ function formatCurrency(value) {
 
 }
 
-
-// ===============================
-// DISPLAY RESULT
-// ===============================
 function displayResults(result, closePrice) {
 
     resultSection.style.display =
@@ -247,10 +217,6 @@ function displayResults(result, closePrice) {
 
 }
 
-
-// ===============================
-// MAKE PREDICTION
-// ===============================
 async function makePrediction(data) {
 
     const response =
@@ -277,10 +243,6 @@ async function makePrediction(data) {
 
 }
 
-
-// ===============================
-// SUBMIT HANDLER
-// ===============================
 async function handleSubmit(e) {
 
     e.preventDefault();
@@ -340,10 +302,6 @@ async function handleSubmit(e) {
 
 }
 
-
-// ===============================
-// INIT
-// ===============================
 function init() {
 
     loadCompanies();
@@ -366,8 +324,6 @@ function init() {
 
 }
 
-
-// ===============================
 document.addEventListener(
     "DOMContentLoaded",
     init
