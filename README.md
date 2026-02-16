@@ -34,30 +34,44 @@ This project demonstrates a comprehensive **end-to-end data analytics pipeline**
 
 ---
 
-## 🏗️ Project Architecture
-```mermaid
-graph LR
-    A[📥 Data Collection] --> B[🧹 Data Cleaning]
-    B --> C[🔧 Feature Engineering]
-    C --> D[💾 SQL Database Storage]
-    D --> E[🔍 SQL Analysis]
-    E --> F[🤖 ML Model Training]
-    F --> G[⚡ FastAPI Prediction API]
-    D --> H[📊 Power BI Dashboard]
-    E --> H
-    G --> H
-    H --> I[💡 Business Insights]
-    
-    style A fill:#e1f5ff
-    style B fill:#fff4e1
-    style C fill:#f0e1ff
-    style D fill:#e1ffe1
-    style E fill:#ffe1e1
-    style F fill:#fff0e1
-    style G fill:#e1f0ff
-    style H fill:#ffe1f5
-    style I fill:#f5ffe1
-```
+
+---
+
+## ⚙️ Architecture Components
+
+### 1. Data Layer
+- Collects stock market data
+- Stores structured datasets
+- Source: APIs, CSV files
+
+### 2. Processing Layer
+- Data cleaning
+- Feature engineering
+- Transformation
+
+### 3. Machine Learning Layer
+- Model training
+- Prediction generation
+- Model saved as `.pkl`
+
+### 4. Backend Layer
+- FastAPI server
+- Handles prediction requests
+- Connects frontend and model
+
+### 5. Frontend Layer
+- User interface
+- Displays prediction results
+- Calls backend API
+
+### 6. Visualization Layer
+- Power BI dashboard
+- Shows insights and trends
+
+---
+
+## 🔄 Data Flow
+
 
 **Pipeline Flow:**
 1. **Data Collection** → Multi-source data extraction (APIs, web scraping, market feeds)
