@@ -22,7 +22,7 @@
 This project demonstrates a comprehensive **end-to-end data analytics pipeline** for stock market intelligence and prediction. The system integrates multiple data sources, performs advanced analytics, and delivers actionable insights through interactive dashboards and real-time predictions.
 
 **Key Capabilities:**
-- 📊 **Data Creation & Processing** : Custom stock market datasets were created and structured using Python (Pandas, NumPy) and stored in CSV format for analysis, visualization, and machine learning
+- 📊 **Data Creation & Processing** : Custom stock market datasets created and processed using Python
 - 🧹 **Data Cleaning**: Robust data preprocessing using Python and Pandas to handle missing values, outliers, and inconsistencies
 - 🔧 **Feature Engineering**: Creation of technical indicators, rolling statistics, and predictive features
 - 💾 **SQL Database Storage**: Structured relational database design for efficient data management and querying
