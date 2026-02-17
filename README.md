@@ -115,6 +115,9 @@ The data model is built on **5 core entity tables** connected through a clean re
 
 ---
 
+### 1️⃣ 🇮🇳📊 Indian Stock Market Intelligence & Analytics
+<img src="Dashboard/Indian_Stock_Market_Intelligence.png" atl = "Indian Stock Market" width ="900"/>
+
 ### 1️⃣ 🏠 Market Overview Dashboard
 
 <img src="Dashboard/Market_Overview.png" alt="Market Overview" width="900"/>
