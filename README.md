@@ -44,35 +44,35 @@ This is a **fully end-to-end, production-grade Data Analytics & Machine Learning
 
 ```mermaid
 flowchart TD
-    A([🐍 Python Dataset Creation\nCREATION_OF_DATASET_USING_PYTHON/]) --> B
+    A([🐍 Python Dataset Creation]) --> B
 
-    B([🗂️ Raw Dataset Storage\nstock_market_unclean_dataset/\n6 data domains: raw, company,\nmacro, trading, news, metadata])
+    B([🗂️ Raw Dataset Storage])
 
-    B --> C([🧹 Data Cleaning — Python\nCleaning_Code/\n8 Jupyter Notebooks\none per data domain])
+    B --> C([🧹 Data Cleaning ])
 
-    C --> D([⚙️ Feature Engineering\nDerived Metrics & Financial Ratios\nSignal-ready columns added])
+    C --> D([⚙️ Feature Engineering])
 
-    D --> E([📁 Clean Dataset Storage\nstock_market_clean_dataset_with_Feature_Eng/\n7 structured CSV files])
+    D --> E([📁 Clean Dataset Storage])
 
-    E --> F([🗄️ SQL Database Import\nSQL/DATA_IMPORTING_CODE.sql\nData loaded into relational tables])
+    E --> F([🗄️ SQL Database Import])
 
-    F --> G([🧱 Data Mart Creation\nSQL/SQL Data Mart.sql\nStar schema architecture])
+    F --> G([🧱 Data Mart Creation])
 
-    G --> H([🔍 SQL Analysis — 20+ Queries\nSQL/QUESTION_WITH_SOLUTION.sql\nReal-world business queries])
+    G --> H([🔍 SQL Analysis — 20+ Queries])
 
-    H --> I([🗺️ ER Diagram Creation\nEntity-Relationship mapping\nacross 5 core tables])
+    H --> I([🗺️ ER Diagram Creation])
 
-    E --> J([🤖 ML Model Training\nML Model/train_model.py\nScikit-Learn pipeline])
+    E --> J([🤖 ML Model Training])
 
-    J --> K([💾 Model Serialization\nstock_model.pkl\ncompany_encoder.pkl])
+    J --> K([💾 Model Serialization])
 
-    K --> L([⚡ FastAPI Prediction API\nML Model/app.py\nREST endpoint for predictions])
+    K --> L([⚡ FastAPI Prediction ])
 
-    L --> M([🌐 Frontend Application\nfrontend/index.html + script.js + style.css\nUser-facing prediction interface])
+    L --> M([🌐 Frontend Application])
 
-    G --> N([📊 Power BI Integration\nSQL → Power BI connection\n8 interactive dashboards])
+    G --> N([📊 Power BI Integration])
 
-    N --> O([💡 Business Insights\nDashboard/\nMarket intelligence & analytics])
+    N --> O([💡 Business Insights])
 
     style A fill:#1e3a5f,stroke:#4fc3f7,color:#fff
     style E fill:#1b4332,stroke:#52b788,color:#fff
@@ -177,6 +177,7 @@ The data model is built on **5 core entity tables** connected through a clean re
 </div>
 
 ---
+
 
 ## 🚀 Step-by-Step Project Workflow
 
