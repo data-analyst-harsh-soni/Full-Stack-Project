@@ -118,37 +118,37 @@ The data model is built on **5 core entity tables** connected through a clean re
 ### 1️⃣ 🇮🇳📊 Indian Stock Market Intelligence & Analytics
 <img src="Dashboard/Indian_Stock_Market_Intelligence.png" atl = "Indian Stock Market" width ="900"/>
 
-### 1️⃣ 🏠 Market Overview Dashboard
+### 2️⃣ 🏠 Market Overview Dashboard
 
 <img src="Dashboard/Market_Overview.png" alt="Market Overview" width="900"/>
 
 ---
 
-### 2️⃣ 🌍 Global Market Intelligence Dashboard
+### 3️⃣ 🌍 Global Market Intelligence Dashboard
 
 <img src="Dashboard/Global_Market_Intelligence_Dashboard.png" alt="Global Market Intelligence" width="900"/>
 
 ---
 
-### 3️⃣ 📈 Stock Price Trend Dashboard
+### 4️⃣ 📈 Stock Price Trend Dashboard
 
 <img src="Dashboard/Stock_Price_Trend.png" alt="Stock Price Trend" width="900"/>
 
 ---
 
-### 4️⃣ 📦 Volume Analysis Dashboard
+### 5️⃣ 📦 Volume Analysis Dashboard
 
 <img src="Dashboard/Volume_Analysis_Dashboard.png" alt="Volume Analysis" width="900"/>
 
 ---
 
-### 5️⃣ 🧠 Market Sentiment Intelligence Dashboard
+### 6️⃣ 🧠 Market Sentiment Intelligence Dashboard
 
 <img src="Dashboard/Market_Sentiment_Intelligence_Dashboard.png" alt="Market Sentiment" width="900"/>
 
 ---
 
-### 6️⃣ 🏢 Company Fundamentals Dashboard
+### 7️⃣ 🏢 Company Fundamentals Dashboard
 
 <img src="Dashboard/Company_Fundamentals.png" alt="Company Fundamentals" width="900"/>
 
