@@ -113,37 +113,47 @@ The data model is built on **5 core entity tables** connected through a clean re
 
 > **8 Power BI dashboards** built from SQL-connected live data, enabling cross-filtered intelligence across market segments.
 
+### 1️⃣ 🏠 Market Overview Dashboard
 <div align="center">
-
-<h2>🏠 Market Overview Dashboard</h2>
-<img src="Dashboard/Market%20Overview.png" width="900">
-<br><br>
-
-<h2>🏢 Company Fundamentals Dashboard</h2>
-<img src="Dashboard/Company%20Fundamentals.png" width="900">
-<br><br>
-
-<h2>📈 Stock Price Trend Dashboard</h2>
-<img src="Dashboard/Stock%20Price%20Trend.png" width="900">
-<br><br>
-
-<h2>📦 Volume Analysis Dashboard</h2>
-<img src="Dashboard/Volume%20Analysis%20Dashboard.png" width="900">
-<br><br>
-
-<h2>🧠 Market Sentiment Dashboard</h2>
-<img src="Dashboard/Market%20Sentiment%20Intelligence%20Dashboard.png" width="900">
-<br><br>
-
-<h2>🌍 Global Market Dashboard</h2>
-<img src="Dashboard/Global%20Market%20Intelligence%20Dashboard.png" width="900">
-<br><br>
-
-<h2>🇮🇳 Indian Market Dashboard</h2>
-<img src="Dashboard/Indian%20Stock%20Market%20Intelligence%20%26%20Analytics.png" width="900">
-
+<img src="Dashboard/Market Overview.png" width="900">
 </div>
 
+---
+
+### 2️⃣ 🌍 Global Market Intelligence Dashboard
+<div align="center">
+<img src="Dashboard/Global Market Intelligence Dashboard.png" width="900">
+</div>
+
+---
+
+### 3️⃣ 📈 Stock Price Trend Dashboard
+<div align="center">
+<img src="Dashboard/Stock Price Trend.png" width="900">
+</div>
+
+---
+
+### 4️⃣ 📦 Volume Analysis Dashboard
+<div align="center">
+<img src="Dashboard/Volume Analysis Dashboard.png" width="900">
+</div>
+
+---
+
+### 5️⃣ 🧠 Market Sentiment Intelligence Dashboard
+<div align="center">
+<img src="Dashboard/Market Sentiment Intelligence Dashboard.png" width="900">
+</div>
+
+---
+
+### 6️⃣ 🏢 Company Fundamentals Dashboard
+<div align="center">
+<img src="Dashboard/Company Fundamentals.png" width="900">
+</div>
+
+---
 
 
 ## 🚀 Step-by-Step Project Workflow
