@@ -113,78 +113,49 @@ The data model is built on **5 core entity tables** connected through a clean re
 
 > **8 Power BI dashboards** built from SQL-connected live data, enabling cross-filtered intelligence across market segments.
 
----
-
-### 🏠 Market Overview Dashboard
-
 <div align="center">
 
-<img src="./Dashboard/Market Overview.png" alt="Market Overview Dashboard" width="900"/>
+<h2>🏠 Market Overview Dashboard</h2>
+
+<img src="Dashboard/Market Overview.png" width="900">
+
+<br><br>
+
+<h2>🏢 Company Fundamentals Dashboard</h2>
+
+<img src="Dashboard/Company Fundamentals.png" width="900">
+
+<br><br>
+
+<h2>📈 Stock Price Trend Dashboard</h2>
+
+<img src="Dashboard/Stock Price Trend.png" width="900">
+
+<br><br>
+
+<h2>📦 Volume Analysis Dashboard</h2>
+
+<img src="Dashboard/Volume Analysis Dashboard.png" width="900">
+
+<br><br>
+
+<h2>🧠 Market Sentiment Intelligence Dashboard</h2>
+
+<img src="Dashboard/Market Sentiment Intelligence Dashboard.png" width="900">
+
+<br><br>
+
+<h2>🌍 Global Market Intelligence Dashboard</h2>
+
+<img src="Dashboard/Global Market Intelligence Dashboard.png" width="900">
+
+<br><br>
+
+<h2>🇮🇳 Indian Stock Market Intelligence & Analytics</h2>
+
+<img src="Dashboard/Indian Stock Market Intelligence & Analytics.png" width="900">
 
 </div>
-
----
-
-### 🏢 Company Fundamentals Dashboard
-
-<div align="center">
-
-<img src="./Dashboard/Company Fundamentals.png" alt="Company Fundamentals Dashboard" width="900"/>
-
-</div>
-
----
-
-### 📈 Stock Price Trend Dashboard
-
-<div align="center">
-
-<img src="./Dashboard/Stock Price Trend.png" alt="Stock Price Trend Dashboard" width="900"/>
-
-</div>
-
----
-
-### 📦 Volume Analysis Dashboard
-
-<div align="center">
-
-<img src="./Dashboard/Volume Analysis Dashboard.png" alt="Volume Analysis Dashboard" width="900"/>
-
-</div>
-
----
-
-### 🧠 Market Sentiment Intelligence Dashboard
-
-<div align="center">
-
-<img src="./Dashboard/Market Sentiment Intelligence Dashboard.png" alt="Market Sentiment Dashboard" width="900"/>
-
-</div>
-
----
-
-### 🌍 Global Market Intelligence Dashboard
-
-<div align="center">
-
-<img src="./Dashboard/Global Market Intelligence Dashboard.png" alt="Global Market Dashboard" width="900"/>
-
-</div>
-
----
-
-### 🇮🇳 Indian Stock Market Intelligence & Analytics
-
-<div align="center">
-
-<img src="./Dashboard/Indian Stock Market Intelligence & Analytics.png" alt="Indian Market Dashboard" width="900"/>
-
-</div>
-
----
-
 
 
 ## 🚀 Step-by-Step Project Workflow
